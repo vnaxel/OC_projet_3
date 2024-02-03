@@ -1,5 +1,6 @@
 package fr.chatop.backend.controllers;
 
+import fr.chatop.backend.dto.CreateMessageResponseDto;
 import fr.chatop.backend.dto.MessageDto;
 import fr.chatop.backend.services.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,10 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping
-    public String createMessage(@RequestBody MessageDto message) {
+    public CreateMessageResponseDto createMessage(@RequestBody MessageDto message) {
         messageService.createMessage(message);
-        return "Message sent with success!";
+        return CreateMessageResponseDto.builder()
+                .message("Message sent with success")
+                .build();
     }
 }
