@@ -11,30 +11,24 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @ToString
-@Table(name = "rentals")
-public class Rental {
+@Table(name = "messages")
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    private Integer surface;
-
-    private Integer price;
-
-    private String pictureUrl;
-
-    @Column(length = 2000)
-    private String description;
+    @ManyToOne
+    private Rental rental;
 
     @ManyToOne
-    @JoinColumn(name="owner_id", referencedColumnName = "id")
-    private User owner;
+    private User sender;
+
+    private String message;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
 
 }

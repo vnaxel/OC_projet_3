@@ -27,6 +27,7 @@ public class RentalService {
 
     @Value("${image.upload.directory}")
     private String imageUploadDirectory;
+
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
 
@@ -43,7 +44,7 @@ public class RentalService {
                 .orElse(null);
     }
 
-    public RentalDto create(final CreateRentalRequestDto rentalRequestDto, final UserDetails userDetails) {
+    public void create(final CreateRentalRequestDto rentalRequestDto, final UserDetails userDetails) {
         final User owner = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new NotFoundException("user not found"));
         final Rental rental = new Rental();
@@ -56,14 +57,14 @@ public class RentalService {
         final Rental savedRental = rentalRepository.save(rental);
         final String pictureUrl = saveImageLocally(savedRental, rentalRequestDto.getPicture());
         savedRental.setPictureUrl("/api/images/" + pictureUrl);
-        return toDto(rentalRepository.save(savedRental));
+        rentalRepository.save(savedRental);
     }
 
-    public RentalDto update(final Long id, final RentalDto rentalDto, final UserDetails userDetails) {
+    public void update(final Long id, final RentalDto rentalDto, final UserDetails userDetails) {
         final Rental rentalToUpdate = rentalRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("rental not found"));
         if (!rentalToUpdate.getOwner().getEmail().equals(userDetails.getUsername())) {
-            throw new NotFoundException("rental owner isnt authenticated user");
+            throw new NotFoundException("rental owner isn't authenticated user");
         }
         final Rental updatedRental = new Rental();
         updatedRental.setId(id);
@@ -75,7 +76,7 @@ public class RentalService {
         updatedRental.setOwner(rentalToUpdate.getOwner());
         updatedRental.setCreatedAt(rentalToUpdate.getCreatedAt());
         updatedRental.setUpdatedAt(LocalDateTime.now());
-        return toDto(rentalRepository.save(updatedRental));
+        rentalRepository.save(updatedRental);
     }
 
     public void delete(final Long id, final UserDetails userDetails) {

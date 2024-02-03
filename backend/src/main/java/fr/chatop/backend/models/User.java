@@ -21,18 +21,18 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 
     @Column(unique = true)
-    String email;
+    private String email;
 
-    String password;
+    private String password;
 
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
-    LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
