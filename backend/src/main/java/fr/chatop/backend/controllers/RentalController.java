@@ -1,5 +1,6 @@
 package fr.chatop.backend.controllers;
 
+import fr.chatop.backend.dto.CreateOrUpdateRentalResponseDto;
 import fr.chatop.backend.dto.CreateRentalRequestDto;
 import fr.chatop.backend.dto.GetRentalsResponse;
 import fr.chatop.backend.dto.RentalDto;
@@ -38,7 +39,7 @@ public class RentalController {
     }
 
     @PostMapping
-    public RentalDto save(@RequestParam("name") String name,
+    public CreateOrUpdateRentalResponseDto save(@RequestParam("name") String name,
                           @RequestParam("description") String description,
                           @RequestParam("picture") MultipartFile picture,
                           @RequestParam("price") Integer price,
@@ -51,16 +52,24 @@ public class RentalController {
                 .price(price)
                 .surface(surface)
                 .build();
-        return rentalService.create(rentalRequestDto, userDetails);
+
+        rentalService.create(rentalRequestDto, userDetails);
+
+        return CreateOrUpdateRentalResponseDto.builder()
+                .message("Rental created !")
+                .build();
     }
 
-        @PutMapping("/{id}")
-        public RentalDto update(@PathVariable Long id, @RequestBody RentalDto rentalDto, @AuthenticationPrincipal UserDetails userDetails) {
-            return rentalService.update(id, rentalDto, userDetails);
-        }
+    @PutMapping("/{id}")
+    public CreateOrUpdateRentalResponseDto update(@PathVariable Long id, @RequestBody RentalDto rentalDto, @AuthenticationPrincipal UserDetails userDetails) {
+        rentalService.update(id, rentalDto, userDetails);
+        return CreateOrUpdateRentalResponseDto.builder()
+                .message("Rental updated !")
+                .build();
+    }
 
-        @DeleteMapping("/{id}")
-        public void delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-            rentalService.delete(id, userDetails);
-        }
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        rentalService.delete(id, userDetails);
+    }
 }
