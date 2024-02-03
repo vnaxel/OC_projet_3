@@ -40,11 +40,12 @@ public class RentalController {
 
     @PostMapping
     public CreateOrUpdateRentalResponseDto save(@RequestParam("name") String name,
-                          @RequestParam("description") String description,
-                          @RequestParam("picture") MultipartFile picture,
-                          @RequestParam("price") Integer price,
-                          @RequestParam("surface") Integer surface,
-                          @AuthenticationPrincipal UserDetails userDetails) {
+                                                @RequestParam("description") String description,
+                                                @RequestParam("picture") MultipartFile picture,
+                                                @RequestParam("price") Integer price,
+                                                @RequestParam("surface") Integer surface,
+                                                @AuthenticationPrincipal UserDetails userDetails) {
+
         CreateRentalRequestDto rentalRequestDto = CreateRentalRequestDto.builder()
                 .name(name)
                 .description(description)
@@ -61,7 +62,20 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public CreateOrUpdateRentalResponseDto update(@PathVariable Long id, @RequestBody RentalDto rentalDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public CreateOrUpdateRentalResponseDto update(@PathVariable Long id,
+                                                  @RequestParam("name") String name,
+                                                  @RequestParam("description") String description,
+                                                  @RequestParam("price") Integer price,
+                                                  @RequestParam("surface") Integer surface,
+                                                  @AuthenticationPrincipal UserDetails userDetails) {
+
+        RentalDto rentalDto = RentalDto.builder()
+                .name(name)
+                .description(description)
+                .price(price)
+                .surface(surface)
+                .build();
+
         rentalService.update(id, rentalDto, userDetails);
         return CreateOrUpdateRentalResponseDto.builder()
                 .message("Rental updated !")
