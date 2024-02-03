@@ -5,6 +5,8 @@ import fr.chatop.backend.dto.CreateRentalRequestDto;
 import fr.chatop.backend.dto.GetRentalsResponseDto;
 import fr.chatop.backend.dto.RentalDto;
 import fr.chatop.backend.services.RentalService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,16 +22,19 @@ public class RentalController {
 
     private final RentalService rentalService;
 
+    @Operation(security = @SecurityRequirement(name = "jwt"))
     @GetMapping
     public GetRentalsResponseDto findAll() {
         return rentalService.findAll();
     }
 
+    @Operation(security = @SecurityRequirement(name = "jwt"))
     @GetMapping("/{id}")
     public RentalDto findById(@PathVariable Long id) {
         return rentalService.get(id);
     }
 
+    @Operation(security = @SecurityRequirement(name = "jwt"))
     @PostMapping
     public CreateOrUpdateRentalResponseDto save(@RequestParam("name") String name,
                                                 @RequestParam("description") String description,
@@ -53,6 +58,7 @@ public class RentalController {
                 .build();
     }
 
+    @Operation(security = @SecurityRequirement(name = "jwt"))
     @PutMapping("/{id}")
     public CreateOrUpdateRentalResponseDto update(@PathVariable Long id,
                                                   @RequestParam("name") String name,
@@ -74,6 +80,7 @@ public class RentalController {
                 .build();
     }
 
+    @Operation(security = @SecurityRequirement(name = "jwt"))
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         rentalService.delete(id, userDetails);

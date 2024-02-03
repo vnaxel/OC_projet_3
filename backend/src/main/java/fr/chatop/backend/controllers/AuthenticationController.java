@@ -6,6 +6,8 @@ import fr.chatop.backend.dto.RegisterRequestDto;
 import fr.chatop.backend.dto.UserDto;
 import fr.chatop.backend.services.AuthenticationService;
 import fr.chatop.backend.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +31,7 @@ public class AuthenticationController {
         return authenticationService.login(request);
     }
 
+    @Operation(security = @SecurityRequirement(name = "jwt"))
     @GetMapping("/me")
     public UserDto me(@AuthenticationPrincipal UserDetails userDetails) {
         return userService.getAuthenticatedUser(userDetails);
