@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class GetRentalsResponse {
+public class GetRentalsResponseDto {
 
     List<RentalDto> rentals;
 }

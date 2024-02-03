@@ -1,8 +1,8 @@
 package fr.chatop.backend.controllers;
 
-import fr.chatop.backend.dto.JwtAuthenticationResponse;
-import fr.chatop.backend.dto.LoginRequest;
-import fr.chatop.backend.dto.RegisterRequest;
+import fr.chatop.backend.dto.JwtAuthenticationResponseDto;
+import fr.chatop.backend.dto.LoginRequestDto;
+import fr.chatop.backend.dto.RegisterRequestDto;
 import fr.chatop.backend.dto.UserDto;
 import fr.chatop.backend.services.AuthenticationService;
 import fr.chatop.backend.services.UserService;
@@ -20,12 +20,12 @@ public class AuthenticationController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public JwtAuthenticationResponse register(@RequestBody RegisterRequest request) {
+    public JwtAuthenticationResponseDto register(@RequestBody RegisterRequestDto request) {
         return  authenticationService.register(request);
     }
 
     @PostMapping("/login")
-    public JwtAuthenticationResponse login(@RequestBody LoginRequest request) {
+    public JwtAuthenticationResponseDto login(@RequestBody LoginRequestDto request) {
         return authenticationService.login(request);
     }
 

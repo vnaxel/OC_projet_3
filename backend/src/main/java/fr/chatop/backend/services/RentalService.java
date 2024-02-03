@@ -1,7 +1,7 @@
 package fr.chatop.backend.services;
 
 import fr.chatop.backend.dto.CreateRentalRequestDto;
-import fr.chatop.backend.dto.GetRentalsResponse;
+import fr.chatop.backend.dto.GetRentalsResponseDto;
 import fr.chatop.backend.dto.RentalDto;
 import fr.chatop.backend.models.Rental;
 import fr.chatop.backend.models.User;
@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +30,8 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
 
-    public GetRentalsResponse findAll() {
-        return new GetRentalsResponse(rentalRepository.findAll()
+    public GetRentalsResponseDto findAll() {
+        return new GetRentalsResponseDto(rentalRepository.findAll()
                 .stream()
                 .map(this::toDto)
                 .toList());

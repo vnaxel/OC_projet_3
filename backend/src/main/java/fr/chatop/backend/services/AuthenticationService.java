@@ -1,8 +1,8 @@
 package fr.chatop.backend.services;
 
-import fr.chatop.backend.dto.JwtAuthenticationResponse;
-import fr.chatop.backend.dto.LoginRequest;
-import fr.chatop.backend.dto.RegisterRequest;
+import fr.chatop.backend.dto.JwtAuthenticationResponseDto;
+import fr.chatop.backend.dto.LoginRequestDto;
+import fr.chatop.backend.dto.RegisterRequestDto;
 import fr.chatop.backend.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +19,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationResponse register(RegisterRequest request) {
+    public JwtAuthenticationResponseDto register(RegisterRequestDto request) {
         var user = User
                 .builder()
                 .name(request.getName())
@@ -29,14 +29,14 @@ public class AuthenticationService {
 
         user = userService.save(user);
         var jwt = jwtService.generateToken(user);
-        return JwtAuthenticationResponse.builder().token(jwt).build();
+        return JwtAuthenticationResponseDto.builder().token(jwt).build();
     }
 
-    public JwtAuthenticationResponse login(LoginRequest request) {
+    public JwtAuthenticationResponseDto login(LoginRequestDto request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         var user = userService.userDetailsService().loadUserByUsername(request.getEmail());
         var jwt = jwtService.generateToken(user);
-        return JwtAuthenticationResponse.builder().token(jwt).build();
+        return JwtAuthenticationResponseDto.builder().token(jwt).build();
     }
 }

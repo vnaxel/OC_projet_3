@@ -2,7 +2,7 @@ package fr.chatop.backend.controllers;
 
 import fr.chatop.backend.dto.CreateOrUpdateRentalResponseDto;
 import fr.chatop.backend.dto.CreateRentalRequestDto;
-import fr.chatop.backend.dto.GetRentalsResponse;
+import fr.chatop.backend.dto.GetRentalsResponseDto;
 import fr.chatop.backend.dto.RentalDto;
 import fr.chatop.backend.services.RentalService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class RentalController {
     private final RentalService rentalService;
 
     @GetMapping
-    public GetRentalsResponse findAll() {
+    public GetRentalsResponseDto findAll() {
         return rentalService.findAll();
     }
 
