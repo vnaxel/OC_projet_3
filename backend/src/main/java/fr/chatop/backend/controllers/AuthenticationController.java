@@ -31,6 +31,6 @@ public class AuthenticationController {
 
     @GetMapping("/me")
     public UserDto me(@AuthenticationPrincipal UserDetails userDetails) {
-        return userService.getUser(userDetails);
+        return userService.getAuthenticatedUser(userDetails);
     }
 }

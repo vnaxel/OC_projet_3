@@ -32,7 +32,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public UserDto getUser(UserDetails userDetails) {
+    public UserDto getAuthenticatedUser(UserDetails userDetails) {
         UserDto me = new UserDto();
         me.setEmail(userDetails.getUsername());
         User user = userRepository.findByEmail(me.getEmail())
@@ -42,6 +42,18 @@ public class UserService {
         me.setCreated_at(user.getCreatedAt());
         me.setUpdated_at(user.getUpdatedAt());
         return me;
+    }
+
+    public UserDto get(Long id) {
+        return userRepository.findById(id)
+                .map(user -> UserDto.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .created_at(user.getCreatedAt())
+                        .updated_at(user.getUpdatedAt())
+                        .build())
+                .orElse(null);
     }
 
     public Long count() {
