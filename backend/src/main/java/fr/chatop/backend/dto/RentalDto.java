@@ -16,10 +16,10 @@ public class RentalDto {
     private String name;
     @Size(max = 2000)
     private String description;
-    private String pictureURL;
+    private String picture;
     private Integer price;
     private Integer surface;
-    private Long owner;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Long owner_id;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
 }

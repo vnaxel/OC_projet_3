@@ -1,6 +1,7 @@
 package fr.chatop.backend.services;
 
 import fr.chatop.backend.dto.CreateRentalRequestDto;
+import fr.chatop.backend.dto.GetRentalsResponse;
 import fr.chatop.backend.dto.RentalDto;
 import fr.chatop.backend.models.Rental;
 import fr.chatop.backend.models.User;
@@ -30,11 +31,11 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
 
-    public List<RentalDto> findAll() {
-        return rentalRepository.findAll()
+    public GetRentalsResponse findAll() {
+        return new GetRentalsResponse(rentalRepository.findAll()
                 .stream()
                 .map(this::toDto)
-                .toList();
+                .toList());
     }
 
     public RentalDto get(final Long id) {
@@ -55,7 +56,7 @@ public class RentalService {
         rental.setCreatedAt(LocalDateTime.now());
         final Rental savedRental = rentalRepository.save(rental);
         final String pictureUrl = saveImageLocally(savedRental, rentalRequestDto.getPicture());
-        savedRental.setPictureUrl(pictureUrl);
+        savedRental.setPictureUrl("/api/images/" + pictureUrl);
         return toDto(rentalRepository.save(savedRental));
     }
 
@@ -69,7 +70,7 @@ public class RentalService {
         updatedRental.setId(id);
         updatedRental.setName(rentalDto.getName() != null && !rentalDto.getName().isEmpty() ? rentalDto.getName() : rentalToUpdate.getName());
         updatedRental.setDescription(rentalDto.getDescription() != null && !rentalDto.getDescription().isEmpty() ? rentalDto.getDescription() : rentalToUpdate.getDescription());
-        updatedRental.setPictureUrl(rentalDto.getPictureURL() != null && !rentalDto.getPictureURL().isEmpty() ? rentalDto.getPictureURL() : rentalToUpdate.getPictureUrl());
+        updatedRental.setPictureUrl(rentalDto.getPicture() != null && !rentalDto.getPicture().isEmpty() ? rentalDto.getPicture() : rentalToUpdate.getPictureUrl());
         updatedRental.setPrice(rentalDto.getPrice() != null ? rentalDto.getPrice() : rentalToUpdate.getPrice());
         updatedRental.setSurface(rentalDto.getSurface() != null ? rentalDto.getSurface() : rentalToUpdate.getSurface());
         updatedRental.setOwner(rentalToUpdate.getOwner());
@@ -93,12 +94,12 @@ public class RentalService {
                 .id(rental.getId())
                 .name(rental.getName())
                 .description(rental.getDescription())
-                .pictureURL(rental.getPictureUrl())
+                .picture(rental.getPictureUrl())
                 .price(rental.getPrice())
                 .surface(rental.getSurface())
-                .owner(rental.getOwner().getId())
-                .createdAt(rental.getCreatedAt())
-                .updatedAt(rental.getUpdatedAt())
+                .owner_id(rental.getOwner().getId())
+                .created_at(rental.getCreatedAt())
+                .updated_at(rental.getUpdatedAt())
                 .build();
     }
 
@@ -106,11 +107,19 @@ public class RentalService {
 
         final String fileName = rental.getId() + "_" + file.getOriginalFilename();
         final Path filePath = Path.of(imageUploadDirectory + "/" + fileName);
+        //si l'image existe deja, on la supprime
+        if (Files.exists(filePath)) {
+            try {
+                Files.delete(filePath);
+            } catch (IOException e) {
+                log.error("Error while deleting image", e);
+            }
+        }
         try {
             Files.write(filePath, file.getBytes());
         } catch (IOException e) {
             log.error("Error while saving image", e);
         }
-        return filePath.toString();
+        return fileName;
     }
 }
