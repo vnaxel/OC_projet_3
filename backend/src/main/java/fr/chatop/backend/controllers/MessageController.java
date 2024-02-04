@@ -1,7 +1,7 @@
 package fr.chatop.backend.controllers;
 
-import fr.chatop.backend.dto.CreateMessageResponseDto;
-import fr.chatop.backend.dto.MessageDto;
+import fr.chatop.backend.dto.SimpleStringResponseDto;
+import fr.chatop.backend.dto.MessageRequestDto;
 import fr.chatop.backend.services.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,9 +20,9 @@ public class MessageController {
 
     @Operation(security = @SecurityRequirement(name = "jwt"))
     @PostMapping
-    public CreateMessageResponseDto createMessage(@RequestBody MessageDto message) {
+    public SimpleStringResponseDto createMessage(@RequestBody MessageRequestDto message) {
         messageService.createMessage(message);
-        return CreateMessageResponseDto.builder()
+        return SimpleStringResponseDto.builder()
                 .message("Message sent with success")
                 .build();
     }

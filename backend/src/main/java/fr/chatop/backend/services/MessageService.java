@@ -1,6 +1,6 @@
 package fr.chatop.backend.services;
 
-import fr.chatop.backend.dto.MessageDto;
+import fr.chatop.backend.dto.MessageRequestDto;
 import fr.chatop.backend.models.Message;
 import fr.chatop.backend.repositories.MessageRepository;
 import fr.chatop.backend.repositories.RentalRepository;
@@ -17,7 +17,7 @@ public class MessageService {
     private final UserRepository userRepository;
     private final RentalRepository rentalRepository;
 
-    public void createMessage(MessageDto message) {
+    public void createMessage(MessageRequestDto message) {
 
         messageRepository.save(Message.builder()
                 .message(message.getMessage())

@@ -1,9 +1,9 @@
 package fr.chatop.backend.controllers;
 
-import fr.chatop.backend.dto.CreateOrUpdateRentalResponseDto;
 import fr.chatop.backend.dto.CreateRentalRequestDto;
 import fr.chatop.backend.dto.GetRentalsResponseDto;
 import fr.chatop.backend.dto.RentalDto;
+import fr.chatop.backend.dto.SimpleStringResponseDto;
 import fr.chatop.backend.services.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,7 +36,7 @@ public class RentalController {
 
     @Operation(security = @SecurityRequirement(name = "jwt"))
     @PostMapping
-    public CreateOrUpdateRentalResponseDto save(@RequestParam("name") String name,
+    public SimpleStringResponseDto save(@RequestParam("name") String name,
                                                 @RequestParam("description") String description,
                                                 @RequestParam("picture") MultipartFile picture,
                                                 @RequestParam("price") Integer price,
@@ -53,19 +53,19 @@ public class RentalController {
 
         rentalService.create(rentalRequestDto, userDetails);
 
-        return CreateOrUpdateRentalResponseDto.builder()
+        return SimpleStringResponseDto.builder()
                 .message("Rental created !")
                 .build();
     }
 
     @Operation(security = @SecurityRequirement(name = "jwt"))
     @PutMapping("/{id}")
-    public CreateOrUpdateRentalResponseDto update(@PathVariable Long id,
-                                                  @RequestParam("name") String name,
-                                                  @RequestParam("description") String description,
-                                                  @RequestParam("price") Integer price,
-                                                  @RequestParam("surface") Integer surface,
-                                                  @AuthenticationPrincipal UserDetails userDetails) {
+    public SimpleStringResponseDto update(@PathVariable Long id,
+                                          @RequestParam("name") String name,
+                                          @RequestParam("description") String description,
+                                          @RequestParam("price") Integer price,
+                                          @RequestParam("surface") Integer surface,
+                                          @AuthenticationPrincipal UserDetails userDetails) {
 
         RentalDto rentalDto = RentalDto.builder()
                 .name(name)
@@ -75,7 +75,7 @@ public class RentalController {
                 .build();
 
         rentalService.update(id, rentalDto, userDetails);
-        return CreateOrUpdateRentalResponseDto.builder()
+        return SimpleStringResponseDto.builder()
                 .message("Rental updated !")
                 .build();
     }
