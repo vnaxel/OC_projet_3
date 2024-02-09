@@ -5,15 +5,17 @@
 Depuis le dossier frontend
 
 Run `npm i`
-Then run `npm run start`
+Puis `npm run start`
 Le frontend est maintenant accessible à l'adresse http://localhost:4200
 
 ## Backend
 
 Pour la base de donnée, j'utilise docker avec spring-boot-docker-compose
 
-Depuis le dossier backend, avec le docker engine qui tourne
+Avec le docker engine qui tourne, spring-boot-cocker-compose va pull et lancer les conteneurs nécessaires
+On aura une base de donnée mysql sur le port 3306 et une gui adminer sur le port 8080
+Pour lancer le backend, la variable d'environnement $JAVA_HOME doit pointer vers une version du JDK 17 ou supérieure
 
-run `docker compose -f compose.yml`
+Depuis le repertoire backend, run `./mvnw spring-boot:run`
 
-La base de donnée se lancera sur le port 3306 avec une GUI sur le port 8080
+On peut maintenant se rendre sur http://localhost:4200 pour tester le bon fonctionnement de l'application fullstack
